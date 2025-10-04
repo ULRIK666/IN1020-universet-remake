@@ -1210,3 +1210,261 @@ h1 {
         padding: 8px 15px;
     }
 }
+
+/* Planet improvements */
+.planet-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.planet-core {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+}
+
+.planet-texture {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    mix-blend-mode: overlay;
+}
+
+.planet-shading {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+}
+
+/* Memory game improvements */
+.player-turn-above {
+    text-align: center;
+    font-size: 1.4rem;
+    margin: 15px 0;
+    padding: 15px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.player1-turn {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: 3px solid #2980b9;
+}
+
+.player2-turn {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    border: 3px solid #c0392b;
+}
+
+.turn-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    font-weight: bold;
+    z-index: 100;
+    animation: popIn 0.5s;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Dart game styles */
+.dart-board {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+    background: radial-gradient(circle at center, #8B4513 10%, #654321 90%);
+    border-radius: 50%;
+    border: 8px solid #5D4037;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.dart-crosshair {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid red;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.dart-aim-x {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: red;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: pulse 1s infinite;
+}
+
+.dart-aim-y {
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    background: red;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: pulse 1s infinite;
+}
+
+.dart-hit {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: yellow;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+}
+
+.points-popup {
+    position: absolute;
+    color: yellow;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    animation: floatUp 1s ease-out;
+    z-index: 15;
+}
+
+@keyframes floatUp {
+    0% { transform: translate(-50%, 0); opacity: 1; }
+    100% { transform: translate(-50%, -30px); opacity: 0; }
+}
+
+.dart-option {
+    background-color: rgba(52, 152, 219, 0.3);
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+}
+
+.dart-option:hover {
+    background-color: rgba(52, 152, 219, 0.5);
+}
+
+.dart-option.correct {
+    background-color: var(--secondary);
+}
+
+.dart-option.incorrect {
+    background-color: var(--accent);
+}
+
+/* Tug of War styles */
+.tug-rope-container {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    margin: 20px 0;
+    background: linear-gradient(180deg, #8B4513, #A0522D);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tug-rope {
+    position: absolute;
+    width: 100%;
+    height: 10px;
+    background: #8B4513;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.tug-rope-position {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: #DC143C;
+    border-radius: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition: left 0.5s ease, transform 0.3s ease;
+    box-shadow: 0 0 10px rgba(220, 20, 60, 0.7);
+    z-index: 10;
+}
+
+.tug-player {
+    position: absolute;
+    top: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.tug-player1 {
+    left: 20px;
+    background: rgba(52, 152, 219, 0.3);
+    border: 2px solid transparent;
+}
+
+.tug-player2 {
+    right: 20px;
+    background: rgba(231, 76, 60, 0.3);
+    border: 2px solid transparent;
+}
+
+.tug-player.active {
+    border-color: currentColor;
+    box-shadow: 0 0 15px currentColor;
+}
+
+.tug-option {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    border: 2px solid transparent;
+}
+
+.tug-option:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.tug-option.correct {
+    background-color: rgba(46, 204, 113, 0.3);
+    border-color: #2ecc71;
+}
+
+.tug-option.incorrect {
+    background-color: rgba(231, 76, 60, 0.3);
+    border-color: #e74c3c;
+}
+
+/* Game selection additions */
+.mode-card[data-game="dart"] {
+    background: linear-gradient(135deg, rgba(139, 69, 19, 0.8), rgba(165, 42, 42, 0.8));
+}
+
+.mode-card[data-game="tugofwar"] {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.8), rgba(231, 76, 60, 0.8));
+}

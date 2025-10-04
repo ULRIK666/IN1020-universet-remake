@@ -1,4 +1,4 @@
-// Memory Game functionality - FIKSET VERSJON
+// Memory Game functionality - FORBEDRET VISNING
 function initMemoryGame(theme) {
     const memoryBoard = document.getElementById('memory-board');
     const player1Info = document.getElementById('player1-info');
@@ -48,6 +48,9 @@ function initMemoryGame(theme) {
         player1Info.classList.add('active');
         if (players === 2) {
             player2Info.classList.remove('active');
+            player2Info.style.display = 'flex';
+        } else {
+            player2Info.style.display = 'none';
         }
         
         // Create card elements
@@ -170,11 +173,11 @@ function initMemoryGame(theme) {
     function updatePlayerTurn() {
         if (players === 1) {
             playerTurnAbove.textContent = `Din tur`;
-            playerTurnAbove.style.backgroundColor = 'rgba(52, 152, 219, 0.3)';
+            playerTurnAbove.className = 'player-turn-above player1-turn';
         } else {
             playerTurnAbove.textContent = `Spiller ${currentPlayer} sin tur`;
-            playerTurnAbove.style.backgroundColor = currentPlayer === 1 ? 
-                'rgba(52, 152, 219, 0.3)' : 'rgba(231, 76, 60, 0.3)';
+            playerTurnAbove.className = currentPlayer === 1 ? 
+                'player-turn-above player1-turn' : 'player-turn-above player2-turn';
         }
         
         // Update active player highlight
@@ -194,16 +197,27 @@ function initMemoryGame(theme) {
         turnMessage.className = 'turn-message';
         
         if (type === 'success') {
-            turnMessage.style.color = 'var(--secondary)';
+            turnMessage.style.color = '#2ecc71';
+            turnMessage.style.backgroundColor = 'rgba(46, 204, 113, 0.9)';
             turnMessage.style.fontSize = '2rem';
+            turnMessage.style.padding = '20px';
+            turnMessage.style.borderRadius = '10px';
+            turnMessage.style.boxShadow = '0 4px 15px rgba(46, 204, 113, 0.4)';
         } else if (type === 'info') {
-            turnMessage.style.color = 'var(--primary)';
+            turnMessage.style.color = '#3498db';
+            turnMessage.style.backgroundColor = 'rgba(52, 152, 219, 0.9)';
             turnMessage.style.fontSize = '1.5rem';
+            turnMessage.style.padding = '15px';
+            turnMessage.style.borderRadius = '8px';
+            turnMessage.style.boxShadow = '0 4px 15px rgba(52, 152, 219, 0.4)';
         }
         
         setTimeout(() => {
             turnMessage.textContent = '';
             turnMessage.style.fontSize = '';
+            turnMessage.style.padding = '';
+            turnMessage.style.backgroundColor = '';
+            turnMessage.style.boxShadow = '';
         }, 2000);
     }
     

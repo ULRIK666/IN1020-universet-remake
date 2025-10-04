@@ -105,6 +105,17 @@
                     <p>Husk hvilke IN1020-begreper du har sett</p>
                     <button class="btn">Spill Begrep Memory</button>
                 </div>
+                <div class="mode-card" data-game="dart">
+                    <h2>Dart Challenge</h2>
+                    <p>Svar på spørsmål for å treffe blinken med piler</p>
+                    <button class="btn">Spill Dart</button>
+                </div>
+
+                <div class="mode-card" data-game="tugofwar">
+                    <h2>Tau-trekk-kamp</h2>
+                    <p>Dra tauet mot din side ved å svare riktig på spørsmål</p>
+                    <button class="btn">Spill Tau-trekk</button>
+                </div>
             </div>
         </div>
         
@@ -271,7 +282,57 @@
             <div class="concept-message" id="concept-message"></div>
             <button class="btn" id="concept-restart">Start på nytt</button>
         </div>
+        <!-- Dart Game Area -->
+        <div id="dart-game-area" class="game-area">
+            <button class="back-btn" id="dart-back-btn">← Tilbake til spill</button>
+            <div class="game-header">
+                <h2 class="game-title">Dart Challenge</h2>
+                <div class="game-stats">
+                    <div class="stat">Poeng: <span id="dart-score">0</span></div>
+                </div>
+            </div>
+            <div class="dart-game-container">
+                <div class="dart-board" id="dart-board">
+                    <div class="dart-crosshair" id="dart-crosshair"></div>
+                    <div class="dart-aim-x" id="dart-aim-x"></div>
+                    <div class="dart-aim-y" id="dart-aim-y"></div>
+                </div>
+                <div class="dart-question" id="dart-question"></div>
+                <div class="dart-options" id="dart-options"></div>
+                <button class="btn" id="dart-throw" style="display: none;">Kast dart!</button>
+            </div>
+            <button class="btn" id="dart-restart">Start på nytt</button>
+        </div>
+        <!-- Tug of War Game Area -->
+        <div id="tugofwar-game-area" class="game-area">
+            <button class="back-btn" id="tugofwar-back-btn">← Tilbake til spill</button>
+            <div class="game-header">
+                <h2 class="game-title">Tau-trekk-kamp</h2>
+                <div class="game-stats">
+                    <div class="stat">Spiller 1: <span id="tug-player1-score">0</span></div>
+                    <div class="stat">Spiller 2: <span id="tug-player2-score">0</span></div>
+                </div>
+            </div>
+            <div class="tug-players">
+                <div class="tug-player tug-player1 active" id="tug-player1">
+                    <h3>Spiller 1</h3>
+                </div>
+                <div class="tug-player tug-player2" id="tug-player2">
+                    <h3>Spiller 2</h3>
+                </div>
+            </div>
+            <div class="tug-rope-container">
+                <div class="tug-rope">
+                    <div class="tug-rope-position" id="tug-rope-position"></div>
+                </div>
+            </div>
+            <div class="tug-question" id="tug-question"></div>
+            <div class="tug-options" id="tug-options"></div>
+            <button class="btn" id="tug-restart">Start på nytt</button>
+        </div>
     </div>
+
+    
 
     <script src="scripts/main.js"></script>
     <script src="scripts/memory.js"></script>
@@ -281,5 +342,7 @@
     <script src="scripts/practice.js"></script>
     <script src="scripts/binary-memory.js"></script>
     <script src="scripts/concept-memory.js"></script>
+    <script src="scripts/dart.js"></script>
+    <script src="scripts/tugofwar.js"></script> 
 </body>
 </html>
