@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IN1020 Læringsspill</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div id="stars"></div>
+    <div id="planets"></div>
+    <div id="meteor" style="display: none;"><img src="images/meteor.gif" alt="Meteor"></div>
+    <div id="shooting-star" style="display: none;"></div>
+    <div id="ufo" style="display: none;"><img src="images/ufo.png" alt="UFO"></div>
+    
+    <div class="container">
+        <header>
+            <h1>IN1020 Læringsspill</h1>
+            <p class="subtitle">Lær faget på en morsom og engasjerende måte!</p>
+        </header>
+        
+        <div id="main-menu">
+            <div class="game-selection">
+                <div class="mode-card">
+                    <h2>Alene Modus</h2>
+                    <p>Øv på faget alene med ulike spill og temaer</p>
+                    <button class="btn" id="solo-btn">Velg Alene Modus</button>
+                </div>
+                <div class="mode-card">
+                    <h2>Gruppemodus</h2>
+                    <p>Spill sammen med andre i et gruppebasert spill</p>
+                    <button class="btn btn-secondary" disabled>Kommer snart</button>
+                </div>
+                <div class="mode-card">
+                    <h2>Rangering</h2>
+                    <p>Se hvor du ligger på rangeringen</p>
+                    <button class="btn btn-secondary" disabled>Kommer snart</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="theme-selection" style="display: none;">
+            <button class="back-btn" id="theme-back-btn">← Tilbake til hovedmeny</button>
+            <h2 style="text-align: center; margin-bottom: 20px;">Velg Tema</h2>
+            <div class="theme-selection">
+                <div class="theme-card" data-theme="nettverk">
+                    <div class="theme-icon">🌐</div>
+                    <h3>Nettverk</h3>
+                    <p>Lær om protokoller, IP-adresser og nettverksarkitektur</p>
+                </div>
+                <div class="theme-card" data-theme="sikkerhet">
+                    <div class="theme-icon">🔒</div>
+                    <h3>Sikkerhet</h3>
+                    <p>Lær om kryptering, sikkerhetsmål og trusler</p>
+                </div>
+                <div class="theme-card" data-theme="programmering">
+                    <div class="theme-icon">💻</div>
+                    <h3>Programmering</h3>
+                    <p>Lær om assemblerkode og datarepresentasjon</p>
+                </div>
+                <div class="theme-card" data-theme="maskinvare">
+                    <div class="theme-icon">⚙️</div>
+                    <h3>Maskinvare</h3>
+                    <p>Lær om CPU, minne og logiske porter</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="game-selection" style="display: none;">
+            <button class="back-btn" id="game-back-btn">← Tilbake til tema</button>
+            <h2 style="text-align: center; margin-bottom: 20px;">Velg Spill</h2>
+            <div class="game-selection">
+                <div class="mode-card" data-game="memory">
+                    <h2>Kode-Kortstokken</h2>
+                    <p>Finn de riktige parene med begreper og definisjoner</p>
+                    <button class="btn">Spill Memory</button>
+                </div>
+                <div class="mode-card" data-game="quiz">
+                    <h2>IN1020 Trivia-Quiz</h2>
+                    <p>Svar på spørsmål og få ekstra tid i neste runde</p>
+                    <button class="btn">Spill Quiz</button>
+                </div>
+                <div class="mode-card" data-game="wordle">
+                    <h2>IN1020 Wordle</h2>
+                    <p>Gjett deg frem til fagordet med begrensede forsøk</p>
+                    <button class="btn">Spill Wordle</button>
+                </div>
+                <div class="mode-card" data-game="tictactoe">
+                    <h2>Tre på Rad</h2>
+                    <p>Spill tre på rad med IN1020-spørsmål</p>
+                    <button class="btn">Spill Tre på Rad</button>
+                </div>
+                <div class="mode-card" data-game="practice">
+                    <h2>Spesifisert Øving</h2>
+                    <p>Øv på spesifikke kategorier innen hvert tema</p>
+                    <button class="btn">Spill Øving</button>
+                </div>
+                <div class="mode-card" data-game="binary-memory">
+                    <h2>Binær Memory</h2>
+                    <p>Husk binære tall i økende sekvenser</p>
+                    <button class="btn">Spill Binær Memory</button>
+                </div>
+                <div class="mode-card" data-game="concept-memory">
+                    <h2>1020 Begrep Memory</h2>
+                    <p>Husk hvilke IN1020-begreper du har sett</p>
+                    <button class="btn">Spill Begrep Memory</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Memory Game Area -->
+        <div id="memory-game-area" class="game-area">
+            <button class="back-btn" id="memory-back-btn">← Tilbake til spill</button>
+            <div class="game-header">
+                <div class="player-info">
+                    <div class="player active" id="player1-info">
+                        <h3>Spiller 1</h3>
+                        <div class="score">0 poeng</div>
+                    </div>
+                </div>
+                <h2 class="game-title">Kode-Kortstokken</h2>
+                <div class="player-info">
+                    <div class="player" id="player2-info">
+                        <h3>Spiller 2</h3>
+                        <div class="score">0 poeng</div>
+                    </div>
+                </div>
+            </div>
+            <div class="player-turn-above" id="player-turn-above">Spiller 1 sin tur</div>
+            <div class="memory-game" id="memory-board">
+                <!-- Memory cards will be generated here -->
+            </div>
+            <div class="turn-message" id="turn-message"></div>
+            <div class="game-controls">
+                <button class="btn" id="memory-restart">Start på nytt</button>
+                <button class="btn btn-secondary" id="memory-change-players">Endre antall spillere</button>
+            </div>
+        </div>
+        
+        <!-- Quiz Game Area -->
+        <div id="quiz-game-area" class="game-area">
+            <button class="back-btn" id="quiz-back-btn">← Tilbake til spill</button>
+            <div class="game-header">
+                <h2 class="game-title">IN1020 Trivia-Quiz</h2>
+                <div class="game-stats">
+                    <div class="stat">Poeng: <span id="quiz-score">0</span></div>
+                    <div class="stat">Tid: <span id="quiz-time">30</span>s</div>
+                </div>
+            </div>
+            <div class="quiz-content" id="quiz-content">
+                <div class="quiz-question" id="quiz-question">
+                    <!-- Quiz question will appear here -->
+                </div>
+                <div class="quiz-options" id="quiz-options">
+                    <!-- Quiz options will appear here -->
+                </div>
+            </div>
+            <div id="quiz-result" style="display: none;">
+                <div class="result-content">
+                    <h2>Quiz fullført!</h2>
+                    <div class="final-score">Du fikk <span id="final-score">0</span> poeng!</div>
+                    <button class="btn" id="quiz-play-again">Spill igjen</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Wordle Game Area -->
+        <div id="wordle-game-area" class="game-area">
+            <button class="back-btn" id="wordle-back-btn">← Tilbake til spill</button>
+            <div class="game-header">
+                <h2 class="game-title">IN1020 Wordle</h2>
+                <div class="game-stats">
+                    <div class="stat">Forsøk: <span id="wordle-attempts">0</span>/6</div>
+                </div>
+            </div>
+            <div class="hint" id="wordle-hint">
+                <!-- Hint will appear here -->
+            </div>
+            <div class="wordle-game" id="wordle-board">
+                <!-- Wordle board will be generated here -->
+            </div>
+            <div class="wordle-input-container">
+                <input type="text" id="wordle-input" placeholder="Skriv ditt ord her">
+                <button class="btn" id="wordle-submit">Gjett</button>
+            </div>
+            <button class="btn" id="wordle-restart" style="display: none;">Spill igjen</button>
+        </div>
+        
+        <!-- Tic Tac Toe Game Area -->
+        <div id="tictactoe-game-area" class="game-area">
+            <button class="back-btn" id="tictactoe-back-btn">← Tilbake til spill</button>
+            <div class="game-header">
+                <h2 class="game-title">Tre på Rad</h2>
+                <div class="game-stats">
+                    <div class="stat">Spiller 1 Liv: <span id="player1-lives">3</span></div>
+                    <div class="stat">Spiller 2 Liv: <span id="player2-lives">3</span></div>
+                </div>
+            </div>
+            <div class="tictactoe-turn" id="tictactoe-turn">Spiller 1 (X) sin tur</div>
+            <div class="tictactoe-board" id="tictactoe-board">
+                <!-- Tic Tac Toe board will be generated here -->
+            </div>
+            <div class="tictactoe-question" id="tictactoe-question">
+                <!-- Question will appear here -->
+            </div>
+            <div class="tictactoe-options" id="tictactoe-options">
+                <!-- Options will appear here -->
+            </div>
+            <button class="btn" id="tictactoe-restart">Start på nytt</button>
+        </div>
+        
+        <!-- Practice Game Area -->
+        <div id="practice-game-area" class="game-area">
+            <button class="back-btn" id="practice-back-btn">← Tilbake til spill</button>
+            <div class="game-header">
+                <h2 class="game-title">Spesifisert Øving</h2>
+                <div class="game-stats">
+                    <div class="stat">Poeng: <span id="practice-score">0</span></div>
+                    <div class="stat">Riktige: <span id="practice-correct">0</span></div>
+                </div>
+            </div>
+            <div class="practice-categories" id="practice-categories">
+                <!-- Categories will appear here -->
+            </div>
+            <div class="practice-content" id="practice-content">
+                <!-- Practice content will appear here -->
+            </div>
+            <button class="btn" id="practice-restart">Start på nytt</button>
+        </div>
+        
+        <!-- Binary Memory Game Area -->
+        <div id="binary-memory-game-area" class="game-area">
+            <button class="back-btn" id="binary-memory-back-btn">← Tilbake til spill</button>
+            <div class="game-header">
+                <h2 class="game-title">Binær Memory</h2>
+                <div class="game-stats">
+                    <div class="stat">Nivå: <span id="binary-level">1</span></div>
+                    <div class="stat">Liv: <span id="binary-lives">3</span></div>
+                </div>
+            </div>
+            <div class="binary-display" id="binary-display">
+                <!-- Binary numbers will be displayed here -->
+            </div>
+            <div class="binary-input-container">
+                <input type="text" id="binary-input" placeholder="Venter på tall..." disabled>
+                <button class="btn" id="binary-next" disabled>Neste</button>
+            </div>
+            <div class="binary-sequence" id="binary-sequence">
+                <!-- Sequence will be shown here -->
+            </div>
+            <button class="btn" id="binary-restart">Start på nytt</button>
+        </div>
+        
+        <!-- Concept Memory Game Area -->
+        <div id="concept-memory-game-area" class="game-area">
+            <button class="back-btn" id="concept-memory-back-btn">← Tilbake til spill</button>
+            <div class="game-header">
+                <h2 class="game-title">1020 Begrep Memory</h2>
+                <div class="game-stats">
+                    <div class="stat">Lives | <span id="concept-lives">3</span></div>
+                    <div class="stat">Score | <span id="concept-score">0</span></div>
+                </div>
+            </div>
+            <div class="concept-display" id="concept-display">
+                <!-- Concept will be displayed here -->
+            </div>
+            <div class="concept-controls">
+                <button class="btn btn-seen" id="concept-seen">SEEN</button>
+                <button class="btn btn-new" id="concept-new">NEW</button>
+            </div>
+            <div class="concept-message" id="concept-message"></div>
+            <button class="btn" id="concept-restart">Start på nytt</button>
+        </div>
+    </div>
+
+    <script src="scripts/main.js"></script>
+    <script src="scripts/memory.js"></script>
+    <script src="scripts/quiz.js"></script>
+    <script src="scripts/wordle.js"></script>
+    <script src="scripts/tictactoe.js"></script>
+    <script src="scripts/practice.js"></script>
+    <script src="scripts/binary-memory.js"></script>
+    <script src="scripts/concept-memory.js"></script>
+</body>
+</html>

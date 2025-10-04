@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IN1020 Læringsspill</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --accent: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: rgba(44, 62, 80, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--light);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .game-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .mode-card {
+            background-color: rgba(44, 62, 80, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .mode-card h2 {
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .mode-card p {
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+        
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #27ae60;
+        }
+        
+        .game-area {
+            background-color: rgba(44, 62, 80, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .game-title {
+            font-size: 1.5rem;
+            color: var(--secondary);
+        }
+        
+        .game-stats {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .stat {
+            background-color: rgba(52, 152, 219, 0.3);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .memory-game {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .memory-card {
+            aspect-ratio: 1;
+            background-color: var(--primary);
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.3s, background-color 0.3s;
+            transform-style: preserve-3d;
+        }
+        
+        .memory-card.flipped {
+            background-color: var(--secondary);
+            transform: rotateY(180deg);
+        }
+        
+        .memory-card.matched {
+            background-color: var(--accent);
+            cursor: default;
+        }
+        
+        .quiz-question {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .quiz-option {
+            background-color: rgba(52, 152, 219, 0.3);
+            padding: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .quiz-option:hover {
+            background-color: rgba(52, 152, 219, 0.5);
+        }
+        
+        .quiz-option.correct {
+            background-color: var(--secondary);
+        }
+        
+        .quiz-option.incorrect {
+            background-color: var(--accent);
+        }
+        
+        .wordle-game {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .wordle-row {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .wordle-cell {
+            width: 50px;
+            height: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .wordle-cell.correct {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+        
+        .wordle-cell.partial {
+            background-color: #f39c12;
+            border-color: #f39c12;
+        }
+        
+        .wordle-cell.incorrect {
+            background-color: var(--dark);
+            border-color: var(--dark);
+        }
+        
+        .wordle-input {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .wordle-input input {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1rem;
+            width: 200px;
+        }
+        
+        .hint {
+            background-color: rgba(243, 156, 18, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .result-message {
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        .success {
+            background-color: rgba(46, 204, 113, 0.3);
+        }
+        
+        .failure {
+            background-color: rgba(231, 76, 60, 0.3);
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--secondary);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .theme-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .theme-card {
+            background-color: rgba(44, 62, 80, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .theme-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .theme-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .back-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .back-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s;
+        }
+        
+        @keyframes celebrate {
+            0% { transform: translateY(0); }
+            25% { transform: translateY(-10px); }
+            50% { transform: translateY(0); }
+            75% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+        
+        .celebrate {
+            animation: celebrate 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>IN1020 Læringsspill</h1>
+            <p class="subtitle">Lær faget på en morsom og engasjerende måte!</p>
+        </header>
+        
+        <div id="main-menu">
+            <div class="game-selection">
+                <div class="mode-card">
+                    <h2>Alene Modus</h2>
+                    <p>Øv på faget alene med ulike spill og temaer</p>
+                    <button class="btn" id="solo-btn">Velg Alene Modus</button>
+                </div>
+                <div class="mode-card">
+                    <h2>Gruppemodus</h2>
+                    <p>Spill sammen med andre i et gruppebasert spill</p>
+                    <button class="btn btn-secondary" disabled>Kommer snart</button>
+                </div>
+                <div class="mode-card">
+                    <h2>Rangering</h2>
+                    <p>Se hvor du ligger på rangeringen</p>
+                    <button class="btn btn-secondary" disabled>Kommer snart</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="theme-selection" style="display: none;">
+            <button class="back-btn" id="theme-back-btn">← Tilbake</button>
+            <h2 style="text-align: center; margin-bottom: 20px;">Velg Tema</h2>
+            <div class="theme-selection">
+                <div class="theme-card" data-theme="nettverk">
+                    <div class="theme-icon">🌐</div>
+                    <h3>Nettverk</h3>
+                    <p>Lær om protokoller, IP-adresser og nettverksarkitektur</p>
+                </div>
+                <div class="theme-card" data-theme="sikkerhet">
+                    <div class="theme-icon">🔒</div>
+                    <h3>Sikkerhet</h3>
+                    <p>Lær om kryptering, sikkerhetsmål og trusler</p>
+                </div>
+                <div class="theme-card" data-theme="programmering">
+                    <div class="theme-icon">💻</div>
+                    <h3>Programmering</h3>
+                    <p>Lær om assemblerkode og datarepresentasjon</p>
+                </div>
+                <div class="theme-card" data-theme="maskinvare">
+                    <div class="theme-icon">⚙️</div>
+                    <h3>Maskinvare</h3>
+                    <p>Lær om CPU, minne og logiske porter</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="game-selection" style="display: none;">
+            <button class="back-btn" id="game-back-btn">← Tilbake</button>
+            <h2 style="text-align: center; margin-bottom: 20px;">Velg Spill</h2>
+            <div class="game-selection">
+                <div class="mode-card" data-game="memory">
+                    <h2>Kode-Kortstokken</h2>
+                    <p>Finn de riktige parene med begreper og definisjoner</p>
+                    <button class="btn">Spill Memory</button>
+                </div>
+                <div class="mode-card" data-game="quiz">
+                    <h2>IN1020 Trivia-Quiz</h2>
+                    <p>Svar på spørsmål og få ekstra tid i neste runde</p>
+                    <button class="btn">Spill Quiz</button>
+                </div>
+                <div class="mode-card" data-game="wordle">
+                    <h2>IN1020 Wordle</h2>
+                    <p>Gjett deg frem til fagordet med begrensede forsøk</p>
+                    <button class="btn">Spill Wordle</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="memory-game-area" class="game-area">
+            <div class="game-header">
+                <h2 class="game-title">Kode-Kortstokken</h2>
+                <div class="game-stats">
+                    <div class="stat">Poeng: <span id="memory-score">0</span></div>
+                    <div class="stat">Forsøk: <span id="memory-attempts">0</span></div>
+                </div>
+            </div>
+            <div class="memory-game" id="memory-board">
+                <!-- Memory cards will be generated here -->
+            </div>
+            <div class="progress-bar">
+                <div class="progress" id="memory-progress"></div>
+            </div>
+            <button class="btn" id="memory-restart">Start på nytt</button>
+        </div>
+        
+        <div id="quiz-game-area" class="game-area">
+            <div class="game-header">
+                <h2 class="game-title">IN1020 Trivia-Quiz</h2>
+                <div class="game-stats">
+                    <div class="stat">Poeng: <span id="quiz-score">0</span></div>
+                    <div class="stat">Tid: <span id="quiz-time">60</span>s</div>
+                    <div class="stat">Runde: <span id="quiz-round">1</span></div>
+                </div>
+            </div>
+            <div class="quiz-question" id="quiz-question">
+                <!-- Quiz question will appear here -->
+            </div>
+            <div class="quiz-options" id="quiz-options">
+                <!-- Quiz options will appear here -->
+            </div>
+            <div class="progress-bar">
+                <div class="progress" id="quiz-progress"></div>
+            </div>
+            <button class="btn" id="quiz-next" style="display: none;">Neste spørsmål</button>
+        </div>
+        
+        <div id="wordle-game-area" class="game-area">
+            <div class="game-header">
+                <h2 class="game-title">IN1020 Wordle</h2>
+                <div class="game-stats">
+                    <div class="stat">Forsøk: <span id="wordle-attempts">0</span>/6</div>
+                </div>
+            </div>
+            <div class="hint" id="wordle-hint">
+                <!-- Hint will appear here -->
+            </div>
+            <div class="wordle-game" id="wordle-board">
+                <!-- Wordle board will be generated here -->
+            </div>
+            <div class="wordle-input">
+                <input type="text" id="wordle-input" maxlength="5" placeholder="Skriv ditt ord her">
+                <button class="btn" id="wordle-submit">Gjett</button>
+            </div>
+            <button class="btn" id="wordle-restart" style="display: none;">Spill igjen</button>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let currentTheme = '';
+        let currentGame = '';
+        
+        // DOM elements
+        const mainMenu = document.getElementById('main-menu');
+        const themeSelection = document.getElementById('theme-selection');
+        const gameSelection = document.getElementById('game-selection');
+        const memoryGameArea = document.getElementById('memory-game-area');
+        const quizGameArea = document.getElementById('quiz-game-area');
+        const wordleGameArea = document.getElementById('wordle-game-area');
+        
+        // Navigation buttons
+        document.getElementById('solo-btn').addEventListener('click', () => {
+            mainMenu.style.display = 'none';
+            themeSelection.style.display = 'block';
+        });
+        
+        document.getElementById('theme-back-btn').addEventListener('click', () => {
+            themeSelection.style.display = 'none';
+            mainMenu.style.display = 'block';
+        });
+        
+        document.getElementById('game-back-btn').addEventListener('click', () => {
+            gameSelection.style.display = 'none';
+            themeSelection.style.display = 'block';
+        });
+        
+        // Theme selection
+        document.querySelectorAll('.theme-card').forEach(card => {
+            card.addEventListener('click', () => {
+                currentTheme = card.getAttribute('data-theme');
+                themeSelection.style.display = 'none';
+                gameSelection.style.display = 'block';
+            });
+        });
+        
+        // Game selection
+        document.querySelectorAll('.mode-card[data-game]').forEach(card => {
+            card.addEventListener('click', () => {
+                currentGame = card.getAttribute('data-game');
+                gameSelection.style.display = 'none';
+                
+                // Hide all game areas first
+                memoryGameArea.style.display = 'none';
+                quizGameArea.style.display = 'none';
+                wordleGameArea.style.display = 'none';
+                
+                // Show selected game
+                if (currentGame === 'memory') {
+                    initMemoryGame();
+                    memoryGameArea.style.display = 'block';
+                } else if (currentGame === 'quiz') {
+                    initQuizGame();
+                    quizGameArea.style.display = 'block';
+                } else if (currentGame === 'wordle') {
+                    initWordleGame();
+                    wordleGameArea.style.display = 'block';
+                }
+            });
+        });
+        
+        // Memory Game
+        function initMemoryGame() {
+            const memoryBoard = document.getElementById('memory-board');
+            const memoryScore = document.getElementById('memory-score');
+            const memoryAttempts = document.getElementById('memory-attempts');
+            const memoryProgress = document.getElementById('memory-progress');
+            const memoryRestart = document.getElementById('memory-restart');
+            
+            // Clear the board
+            memoryBoard.innerHTML = '';
+            
+            // Get cards based on theme
+            const cards = getMemoryCards(currentTheme);
+            
+            // Shuffle cards
+            const shuffledCards = [...cards, ...cards].sort(() => Math.random() - 0.5);
+            
+            let flippedCards = [];
+            let matchedPairs = 0;
+            let score = 0;
+            let attempts = 0;
+            
+            // Create card elements
+            shuffledCards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'memory-card';
+                cardElement.setAttribute('data-index', index);
+                cardElement.setAttribute('data-id', card.id);
+                cardElement.textContent = '?';
+                
+                cardElement.addEventListener('click', () => {
+                    if (flippedCards.length < 2 && !cardElement.classList.contains('flipped') && !cardElement.classList.contains('matched')) {
+                        cardElement.classList.add('flipped');
+                        cardElement.textContent = card.content;
+                        flippedCards.push(cardElement);
+                        
+                        if (flippedCards.length === 2) {
+                            attempts++;
+                            memoryAttempts.textContent = attempts;
+                            
+                            const card1 = flippedCards[0];
+                            const card2 = flippedCards[1];
+                            
+                            if (card1.getAttribute('data-id') === card2.getAttribute('data-id')) {
+                                // Match found
+                                card1.classList.add('matched');
+                                card2.classList.add('matched');
+                                matchedPairs++;
+                                score += 10;
+                                memoryScore.textContent = score;
+                                
+                                // Update progress
+                                memoryProgress.style.width = `${(matchedPairs / cards.length) * 100}%`;
+                                
+                                // Check if game is complete
+                                if (matchedPairs === cards.length) {
+                                    setTimeout(() => {
+                                        alert(`Gratulerer! Du fullførte spillet med ${attempts} forsøk og ${score} poeng!`);
+                                    }, 500);
+                                }
+                                
+                                flippedCards = [];
+                            } else {
+                                // No match
+                                setTimeout(() => {
+                                    card1.classList.remove('flipped');
+                                    card2.classList.remove('flipped');
+                                    card1.textContent = '?';
+                                    card2.textContent = '?';
+                                    flippedCards = [];
+                                }, 1000);
+                            }
+                        }
+                    }
+                });
+                
+                memoryBoard.appendChild(cardElement);
+            });
+            
+            // Restart button
+            memoryRestart.addEventListener('click', initMemoryGame);
+        }
+        
+        function getMemoryCards(theme) {
+            // Define cards based on theme
+            const cards = {
+                nettverk: [
+                    { id: 1, content: 'HTTP', definition: 'Hypertext Transfer Protocol' },
+                    { id: 2, content: 'TCP', definition: 'Transmission Control Protocol' },
+                    { id: 3, content: 'IP', definition: 'Internet Protocol' },
+                    { id: 4, content: 'DNS', definition: 'Domain Name System' },
+                    { id: 5, content: 'LAN', definition: 'Local Area Network' },
+                    { id: 6, content: 'WAN', definition: 'Wide Area Network' },
+                    { id: 7, content: 'MAC', definition: 'Media Access Control' },
+                    { id: 8, content: 'UDP', definition: 'User Datagram Protocol' }
+                ],
+                sikkerhet: [
+                    { id: 1, content: 'CIA', definition: 'Confidentiality, Integrity, Availability' },
+                    { id: 2, content: 'DDoS', definition: 'Distributed Denial of Service' },
+                    { id: 3, content: 'VPN', definition: 'Virtual Private Network' },
+                    { id: 4, content: 'PKI', definition: 'Public Key Infrastructure' },
+                    { id: 5, content: 'SSL', definition: 'Secure Sockets Layer' },
+                    { id: 6, content: 'IDS', definition: 'Intrusion Detection System' },
+                    { id: 7, content: 'Malware', definition: 'Skadelig programvare' },
+                    { id: 8, content: 'Firewall', definition: 'Brannmur' }
+                ],
+                programmering: [
+                    { id: 1, content: 'CPU', definition: 'Central Processing Unit' },
+                    { id: 2, content: 'RAM', definition: 'Random Access Memory' },
+                    { id: 3, content: 'ALU', definition: 'Arithmetic Logic Unit' },
+                    { id: 4, content: 'ASCII', definition: 'American Standard Code for Information Interchange' },
+                    { id: 5, content: 'UTF-8', definition: 'Unicode Transformation Format' },
+                    { id: 6, content: 'Binary', definition: 'Binært tallsystem' },
+                    { id: 7, content: 'Hex', definition: 'Heksadesimalt tallsystem' },
+                    { id: 8, content: 'Octal', definition: 'Oktalt tallsystem' }
+                ],
+                maskinvare: [
+                    { id: 1, content: 'AND', definition: 'Logisk OG-port' },
+                    { id: 2, content: 'OR', definition: 'Logisk ELLER-port' },
+                    { id: 3, content: 'XOR', definition: 'Eksklusiv ELLER-port' },
+                    { id: 4, content: 'NAND', definition: 'Ikke-OG-port' },
+                    { id: 5, content: 'NOR', definition: 'Ikke-ELLER-port' },
+                    { id: 6, content: 'Flip-flop', definition: 'Minneelement' },
+                    { id: 7, content: 'Register', definition: 'Lagerlokasjon i CPU' },
+                    { id: 8, content: 'Cache', definition: 'Hurtigminne' }
+                ]
+            };
+            
+            return cards[theme] || cards.nettverk;
+        }
+        
+        // Quiz Game
+        function initQuizGame() {
+            const quizQuestion = document.getElementById('quiz-question');
+            const quizOptions = document.getElementById('quiz-options');
+            const quizScore = document.getElementById('quiz-score');
+            const quizTime = document.getElementById('quiz-time');
+            const quizRound = document.getElementById('quiz-round');
+            const quizProgress = document.getElementById('quiz-progress');
+            const quizNext = document.getElementById('quiz-next');
+            
+            let score = 0;
+            let timeLeft = 60;
+            let currentRound = 1;
+            let currentQuestionIndex = 0;
+            let timer;
+            let extraTime = 0;
+            
+            // Get questions based on theme
+            const questions = getQuizQuestions(currentTheme);
+            
+            // Start the game
+            startRound();
+            
+            function startRound() {
+                quizScore.textContent = score;
+                quizRound.textContent = currentRound;
+                quizTime.textContent = timeLeft + extraTime;
+                
+                // Reset timer
+                clearInterval(timer);
+                timeLeft = 60 + extraTime;
+                extraTime = 0;
+                
+                // Start timer
+                timer = setInterval(() => {
+                    timeLeft--;
+                    quizTime.textContent = timeLeft;
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        endRound();
+                    }
+                }, 1000);
+                
+                // Show first question
+                showQuestion();
+            }
+            
+            function showQuestion() {
+                if (currentQuestionIndex >= questions.length) {
+                    endRound();
+                    return;
+                }
+                
+                const question = questions[currentQuestionIndex];
+                quizQuestion.textContent = question.question;
+                
+                // Clear options
+                quizOptions.innerHTML = '';
+                
+                // Create option elements
+                question.options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'quiz-option';
+                    optionElement.textContent = option;
+                    
+                    optionElement.addEventListener('click', () => {
+                        // Disable all options
+                        document.querySelectorAll('.quiz-option').forEach(opt => {
+                            opt.style.pointerEvents = 'none';
+                        });
+                        
+                        if (option === question.answer) {
+                            // Correct answer
+                            optionElement.classList.add('correct');
+                            score += 10;
+                            extraTime += 15;
+                            quizScore.textContent = score;
+                            
+                            // Show success message
+                            const message = document.createElement('div');
+                            message.className = 'result-message success';
+                            message.textContent = 'Riktig! Du fikk 10 poeng og 15 sekunder ekstra tid!';
+                            quizOptions.parentNode.insertBefore(message, quizOptions.nextSibling);
+                        } else {
+                            // Incorrect answer
+                            optionElement.classList.add('incorrect');
+                            
+                            // Highlight correct answer
+                            document.querySelectorAll('.quiz-option').forEach(opt => {
+                                if (opt.textContent === question.answer) {
+                                    opt.classList.add('correct');
+                                }
+                            });
+                            
+                            // Show failure message
+                            const message = document.createElement('div');
+                            message.className = 'result-message failure';
+                            message.textContent = `Feil! Riktig svar er: ${question.answer}`;
+                            quizOptions.parentNode.insertBefore(message, quizOptions.nextSibling);
+                        }
+                        
+                        // Update progress
+                        quizProgress.style.width = `${((currentQuestionIndex + 1) / questions.length) * 100}%`;
+                        
+                        // Show next button
+                        quizNext.style.display = 'block';
+                    });
+                    
+                    quizOptions.appendChild(optionElement);
+                });
+                
+                currentQuestionIndex++;
+            }
+            
+            function endRound() {
+                clearInterval(timer);
+                quizQuestion.textContent = `Runde ${currentRound} fullført! Poeng: ${score}`;
+                quizOptions.innerHTML = '';
+                quizNext.style.display = 'block';
+                quizNext.textContent = 'Neste runde';
+                
+                quizNext.onclick = () => {
+                    if (currentRound < 3) {
+                        currentRound++;
+                        currentQuestionIndex = 0;
+                        startRound();
+                        quizNext.style.display = 'none';
+                    } else {
+                        alert(`Spillet er over! Totalt poeng: ${score}`);
+                        initQuizGame(); // Restart game
+                    }
+                };
+            }
+            
+            // Next button
+            quizNext.addEventListener('click', () => {
+                const message = document.querySelector('.result-message');
+                if (message) message.remove();
+                
+                quizNext.style.display = 'none';
+                showQuestion();
+            });
+        }
+        
+        function getQuizQuestions(theme) {
+            // Define questions based on theme
+            const questions = {
+                nettverk: [
+                    {
+                        question: "Hva står TCP for?",
+                        options: ["Transmission Control Protocol", "Total Connection Protocol", "Technical Computer Protocol", "Transfer Control Process"],
+                        answer: "Transmission Control Protocol"
+                    },
+                    {
+                        question: "Hvilken port bruker HTTP vanligvis?",
+                        options: ["80", "443", "21", "25"],
+                        answer: "80"
+                    },
+                    {
+                        question: "Hva er hovedoppgaven til DNS?",
+                        options: ["Oversette domenenavn til IP-adresser", "Kryptere data", "Sende e-post", "Blokkere skadelig trafikk"],
+                        answer: "Oversette domenenavn til IP-adresser"
+                    },
+                    {
+                        question: "Hva er en MAC-adresse?",
+                        options: ["En unik identifikator for nettverkskort", "En type IP-adresse", "En sikkerhetsnøkkel", "En protokoll for trådløse nettverk"],
+                        answer: "En unik identifikator for nettverkskort"
+                    },
+                    {
+                        question: "Hvilken protokoll brukes for å sende e-post?",
+                        options: ["SMTP", "HTTP", "FTP", "SSH"],
+                        answer: "SMTP"
+                    }
+                ],
+                sikkerhet: [
+                    {
+                        question: "Hva står CIA i informasjonssikkerhet?",
+                        options: ["Confidentiality, Integrity, Availability", "Central Intelligence Agency", "Computer Information Access", "Cyber Incident Analysis"],
+                        answer: "Confidentiality, Integrity, Availability"
+                    },
+                    {
+                        question: "Hva er en DDoS-angrep?",
+                        options: ["Distributed Denial of Service", "Digital Data Overload System", "Direct Disk Operation Service", "Data Destruction on Server"],
+                        answer: "Distributed Denial of Service"
+                    },
+                    {
+                        question: "Hva er formålet med en brannmur?",
+                        options: ["Kontrollere nettverkstrafikk", "Forbedre nettverkshastighet", "Lagre sikkerhetskopier", "Generere passord"],
+                        answer: "Kontrollere nettverkstrafikk"
+                    },
+                    {
+                        question: "Hva er forskjellen mellom symmetrisk og asymmetrisk kryptering?",
+                        options: ["Symmetrisk bruker én nøkkel, asymmetrisk bruker to", "Symmetrisk er raskere, asymmetrisk er sikrere", "Symmetrisk brukes til e-post, asymmetrisk til nettsider", "Symmetrisk er eldre teknologi"],
+                        answer: "Symmetrisk bruker én nøkkel, asymmetrisk bruker to"
+                    },
+                    {
+                        question: "Hva er en zero-day-sårbarhet?",
+                        options: ["En sårbarhet som ikke er kjent for leverandøren", "En sårbarhet som ikke kan utnyttes", "En sårbarhet som bare varer i én dag", "En sårbarhet i operativsystemet"],
+                        answer: "En sårbarhet som ikke er kjent for leverandøren"
+                    }
+                ],
+                programmering: [
+                    {
+                        question: "Hva er hovedforskjellen mellom RAM og ROM?",
+                        options: ["RAM er lese/skriv-minne, ROM er bare-lese-minne", "RAM er raskere enn ROM", "ROM er volatile, RAM er ikke", "RAM lagrer operativsystemet"],
+                        answer: "RAM er lese/skriv-minne, ROM er bare-lese-minne"
+                    },
+                    {
+                        question: "Hva er binærtallet 1010 i desimal?",
+                        options: ["10", "5", "12", "8"],
+                        answer: "10"
+                    },
+                    {
+                        question: "Hva er heksadesimaltallet FF i desimal?",
+                        options: ["255", "256", "15", "240"],
+                        answer: "255"
+                    },
+                    {
+                        question: "Hva er ASCII?",
+                        options: ["En standard for tegnkoding", "En programmeringsspråk", "En type minne", "En datastruktur"],
+                        answer: "En standard for tegnkoding"
+                    },
+                    {
+                        question: "Hva er hovedoppgaven til en CPU?",
+                        options: ["Utføre instruksjoner", "Lagre data", "Vise grafikk", "Koble til internett"],
+                        answer: "Utføre instruksjoner"
+                    }
+                ],
+                maskinvare: [
+                    {
+                        question: "Hva er en ALU?",
+                        options: ["Arithmetic Logic Unit", "Advanced Logic Unit", "Automated Learning Unit", "Application Logic Utility"],
+                        answer: "Arithmetic Logic Unit"
+                    },
+                    {
+                        question: "Hvilken logisk port gir output 1 bare når begge input er 1?",
+                        options: ["AND", "OR", "XOR", "NOT"],
+                        answer: "AND"
+                    },
+                    {
+                        question: "Hva er en flip-flop?",
+                        options: ["Et minneelement", "En type transistor", "En feil i kretsen", "En måleenhet"],
+                        answer: "Et minneelement"
+                    },
+                    {
+                        question: "Hva er cache-minne?",
+                        options: ["Hurtigminne nær CPU", "Sakte minne på harddisk", "Eksternt lagringsmedium", "Sikkerhetskopi av data"],
+                        answer: "Hurtigminne nær CPU"
+                    },
+                    {
+                        question: "Hva er hovedforskjellen mellom en mikroprosessor og en mikrokontroller?",
+                        options: ["Mikrokontroller har integrert minne og I/O", "Mikroprosessor er mindre", "Mikrokontroller er raskere", "Mikroprosessor brukes bare i PC-er"],
+                        answer: "Mikrokontroller har integrert minne og I/O"
+                    }
+                ]
+            };
+            
+            return questions[theme] || questions.nettverk;
+        }
+        
+        // Wordle Game
+        function initWordleGame() {
+            const wordleHint = document.getElementById('wordle-hint');
+            const wordleBoard = document.getElementById('wordle-board');
+            const wordleInput = document.getElementById('wordle-input');
+            const wordleSubmit = document.getElementById('wordle-submit');
+            const wordleRestart = document.getElementById('wordle-restart');
+            const wordleAttempts = document.getElementById('wordle-attempts');
+            
+            // Get word and hint based on theme
+            const { word, hint } = getWordleWord(currentTheme);
+            
+            let attempts = 0;
+            const maxAttempts = 6;
+            let gameOver = false;
+            
+            // Display hint
+            wordleHint.textContent = hint;
+            
+            // Create board
+            wordleBoard.innerHTML = '';
+            for (let i = 0; i < maxAttempts; i++) {
+                const row = document.createElement('div');
+                row.className = 'wordle-row';
+                
+                for (let j = 0; j < word.length; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'wordle-cell';
+                    row.appendChild(cell);
+                }
+                
+                wordleBoard.appendChild(row);
+            }
+            
+            // Submit guess
+            wordleSubmit.addEventListener('click', processGuess);
+            wordleInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') processGuess();
+            });
+            
+            function processGuess() {
+                if (gameOver) return;
+                
+                const guess = wordleInput.value.toUpperCase();
+                
+                // Validate guess
+                if (guess.length !== word.length) {
+                    alert(`Ordet må være ${word.length} bokstaver langt!`);
+                    return;
+                }
+                
+                // Update attempts
+                attempts++;
+                wordleAttempts.textContent = attempts;
+                
+                // Get current row
+                const currentRow = wordleBoard.children[attempts - 1];
+                const cells = currentRow.children;
+                
+                // Check each letter
+                let correctCount = 0;
+                const wordArray = word.split('');
+                const guessArray = guess.split('');
+                
+                // First pass: mark correct letters
+                for (let i = 0; i < word.length; i++) {
+                    if (guessArray[i] === wordArray[i]) {
+                        cells[i].classList.add('correct');
+                        cells[i].textContent = guessArray[i];
+                        correctCount++;
+                        wordArray[i] = null; // Mark as used
+                    }
+                }
+                
+                // Second pass: mark partial matches
+                for (let i = 0; i < word.length; i++) {
+                    if (cells[i].classList.contains('correct')) continue;
+                    
+                    const index = wordArray.indexOf(guessArray[i]);
+                    if (index !== -1) {
+                        cells[i].classList.add('partial');
+                        cells[i].textContent = guessArray[i];
+                        wordArray[index] = null; // Mark as used
+                    } else {
+                        cells[i].classList.add('incorrect');
+                        cells[i].textContent = guessArray[i];
+                    }
+                }
+                
+                // Check win condition
+                if (correctCount === word.length) {
+                    gameOver = true;
+                    wordleHint.textContent = `Gratulerer! Du gjettet ordet "${word}" på ${attempts} forsøk!`;
+                    wordleSubmit.style.display = 'none';
+                    wordleRestart.style.display = 'block';
+                } else if (attempts >= maxAttempts) {
+                    gameOver = true;
+                    wordleHint.textContent = `Beklager! Ordet var "${word}". Prøv igjen!`;
+                    wordleSubmit.style.display = 'none';
+                    wordleRestart.style.display = 'block';
+                }
+                
+                // Clear input
+                wordleInput.value = '';
+            }
+            
+            // Restart button
+            wordleRestart.addEventListener('click', initWordleGame);
+        }
+        
+        function getWordleWord(theme) {
+            // Define words and hints based on theme
+            const words = {
+                nettverk: [
+                    { word: "ROUTER", hint: "Enhet som sender datapakker mellom datanett" },
+                    { word: "SERVER", hint: "Datamaskin som tilbyr tjenester til klienter" },
+                    { word: "SOCKET", hint: "Endepunkt for kommunikasjon mellom maskiner" },
+                    { word: "PACKET", hint: "En enhet med data som sendes over et nettverk" },
+                    { word: "DOMAIN", hint: "Et navn som identifiserer en gruppering av datamaskiner" }
+                ],
+                sikkerhet: [
+                    { word: "CIPHER", hint: "Algoritme for kryptering og dekryptering" },
+                    { word: "ATTACK", hint: "Forsøk på å skade eller få uautorisert tilgang" },
+                    { word: "BREACH", hint: "Sikkerhetsbrudd der data blir eksponert" },
+                    { word: "ACCESS", hint: "Mulighet til å bruke eller se informasjon" },
+                    { word: "THREAT", hint: "Potensiell fare for informasjonssikkerheten" }
+                ],
+                programmering: [
+                    { word: "BINARY", hint: "Tallsystem med base 2, kun 0 og 1" },
+                    { word: "MEMORY", hint: "Datamaskinens lagring for data og instruksjoner" },
+                    { word: "SYNTAX", hint: "Regler for hvordan kode skal skrives" },
+                    { word: "OBJECT", hint: "Instans av en klasse i objektorientert programmering" },
+                    { word: "STRING", hint: "Datatype som representerer tekst" }
+                ],
+                maskinvare: [
+                    { word: "CACHE", hint: "Hurtigminne som lagrer ofte brukte data" },
+                    { word: "DEVICE", hint: "Fysisk komponent i et datasystem" },
+                    { word: "SOCKET", hint: "Koblingspunkt for prosessor på hovedkort" },
+                    { word: "BUFFER", hint: "Midlertidig lagringsområde for data" },
+                    { word: "SENSOR", hint: "Enhet som registrerer fysiske forhold" }
+                ]
+            };
+            
+            const themeWords = words[theme] || words.nettverk;
+            return themeWords[Math.floor(Math.random() * themeWords.length)];
+        }
+    </script>
+</body>
+</html>
